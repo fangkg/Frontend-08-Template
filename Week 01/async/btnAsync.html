@@ -1,0 +1,85 @@
+<!--
+ * @Author: fangkg
+ * @Date: 2020-12-26 13:11:23
+ * @LastEditTime: 2020-12-26 13:17:39
+ * @LastEditors: Please set LastEditors
+ * @Description: 手动控制红绿灯显示
+ * @FilePath: \codeRepository\Frontend-08-Template\Week 01\async\btnAsync.html
+-->
+
+<style>
+    div {
+        background-color: grey;
+        display: inline-block;
+        margin: 30px;
+        width: 100px;
+        height: 100px;
+        border-radius: 50px;
+    }
+    .green.light {
+        background-color: green;
+    }
+    .yellow.light {
+        background-color: yellow;
+    }
+    .red.light {
+        background-color: red;
+    }
+</style>
+
+<div class="green"></div>
+<div class="yellow"></div>
+<div class="red"></div>
+<button id="next">点击</button>
+
+<script>
+    function green() {
+        let lights = document.getElementsByTagName("div");
+        for(let i = 0; i < 3; i++) {
+            lights[i].classList.remove("light");
+            document.getElementsByClassName("green")[0].classList.add('light');
+        }
+    }
+
+    function red() {
+        let lights = document.getElementsByTagName("div");
+        for(let i = 0; i < 3; i++) {
+            lights[i].classList.remove("light");
+            document.getElementsByClassName("red")[0].classList.add('light');
+        }
+    }
+
+    function yellow() {
+        let lights = document.getElementsByTagName("div");
+        for(let i = 0; i < 3; i++) {
+            lights[i].classList.remove("light");
+            document.getElementsByClassName("yellow")[0].classList.add('light');
+        }
+    }
+
+    function sleep(t) {
+        return new Promise((resolve, reject) => {
+            setTimeout(resolve, t);
+        })
+    }
+
+    function happen(element, eventName) {
+        return new Promise((resolve, reject) => {
+            element.addEventListener(eventName, resolve);
+        })
+    }
+
+    async function go() {
+        // 无限循环
+        while(true) {
+            green();
+            await happen(document.getElementById("next"), "click");
+            yellow();
+            await happen(document.getElementById("next"), "click");
+            red();
+            await happen(document.getElementById("next"), "click");
+        }
+    }
+
+    
+</script>
