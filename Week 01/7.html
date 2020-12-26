@@ -1,0 +1,167 @@
+<!--
+ * @Author: fangkg
+ * @Date: 2020-12-26 11:15:43
+ * @LastEditTime: 2020-12-26 12:26:18
+ * @LastEditors: Please set LastEditors
+ * @Description: 实现一个TicTacToe游戏
+ * @FilePath: \codeRepository\Frontend-08-Template\Week 01\7.html
+-->
+
+<style>
+    .cell {
+        width: 100px;
+        height: 100px;
+        background-color: green;
+        display: inline-block;
+        border: solid 1px white;
+        vertical-align: middle;
+
+        line-height: 100px;
+        font-size: 50px;
+        text-align: center;
+    }
+</style>
+
+<div id="board"></div>
+
+<script>
+    // 一维数组保存棋盘
+    let pattern = [
+        0, 0, 0,
+        0, 0, 0,
+        0, 0, 0
+    ]
+    let color = 1;
+    function show() {
+        let board = document.getElementById("board");
+        board.innerHTML = "";
+
+        // let声明变量创建一个词法作用域
+        for(let i = 0; i < 3; i++) {
+            for(let j = 0; j < 3; j++) {
+                let cell = document.createElement("div");
+                cell.classList.add("cell");
+                cell.innerText = pattern[i * 3 + j] == 2 ? "X" : pattern[i * 3 + j] == 1 ? "O" : "";
+                cell.addEventListener("click", () => move(j, i));
+                board.appendChild(cell);
+            }
+            board.appendChild(document.createElement("br"));
+        }
+    }
+
+    function move(x, y) {
+        pattern[y * 3 + x] = color;
+        if (check()) {
+            alert(color == 2 ? "X is winner!" : "O is winner!");
+        }
+        color = 3 - color;
+        console.log(bestChoice(pattern, color));
+        show();
+    }
+
+    function check() {
+        for(let i = 0; i < 3; i++) {
+            let win = true;
+            for(let j = 0; j < 3; j++) {
+                if(pattern[i * 3 + j] !== color) {
+                    win = false;
+                }
+            }
+            if(win) {
+                return true;
+            }
+        }
+        for(let i = 0; i < 3; i++) {
+            let win = true;
+            for(let j = 0; j < 3; j++) {
+                if(pattern[j * 3 + i] !== color) {
+                    win = false;
+                }
+            }
+            if (win) {
+                return true;
+            }
+        }
+        for(let i = 0; i < 3; i++){
+            let win = true;
+            for(let j = 0; j < 3; j++) {
+                if(pattern[j * 3 + 2 - j] !== color) {
+                    win = false;
+                }
+            }
+            if(win) {
+                return true;
+            }
+        }
+        for(let i = 0; i < 3; i++){
+            let win = true;
+            for(let j = 0; j < 3; j++) {
+                if (pattern[j * 3 + j] !== color) {
+                    win = false;
+                }
+            }
+            if (win) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    function clone(pattern) {
+        // 继承原来pattern的方法和数据
+        return Object.create(pattern);
+    }
+
+    function willWin(pattern, color) {
+        for(let i = 0; i < 3; i++) {
+            for(let j = 0; j < 3; j++) {
+                if (pattern[i * 3 + j] !== 0) {
+                    continue;
+                }
+                let tmp = clone(pattern);
+                tmp[i * 3 + j] = color;
+                if(check(tmp, color)) {
+                    // 返回point
+                    return [j, i];
+                }
+            }
+        }
+
+        return null;
+    }
+
+    function bestChoice(pattern, color) {
+        
+        let point = willWin(pattern, color);
+        if (point) {
+            return {
+                point: point,
+                result: 1
+            }
+        }
+        for(let i = 0; i < 3; i++) {
+            for(let j = 0; j < 3; j++) {
+                if (pattern[i][j]) {
+                    continue;
+                }
+                let tmp = clone(pattern);
+                tmp[i][j] = color;
+                let r = bestChoice(tmp, 3 - color).result;
+                
+                if(-r > result) {
+                    result = -r;
+                    point = [j, i];
+                }
+            }
+        }
+
+        return {
+            point: point,
+            result: point ? result : 0
+        }
+    }
+
+    show(pattern);
+    console.log(bestChoice(pattern, color));
+</script>

@@ -1,0 +1,50 @@
+<!--
+ * @Author: fangkg
+ * @Date: 2020-12-26 11:04:37
+ * @LastEditTime: 2020-12-26 11:12:42
+ * @LastEditors: Please set LastEditors
+ * @Description: 实现一个TicTacToe游戏
+ * @FilePath: \codeRepository\Frontend-08-Template\Week 01\2.html
+-->
+
+<style>
+    .cell {
+        width: 100px;
+        height: 100px;
+        background-color: green;
+        display: inline-block;
+        border: solid 1px white;
+        vertical-align: middle;
+        
+        /* height等于line-height垂直居中 */
+        line-height: 100px;
+        font-size: 50px;
+        /* 水平居中 */
+        text-align: center;
+    }
+</style>
+
+<div id="board"></div>
+
+<script>
+    let pattern = [
+        [2, 0, 0],
+        [0, 1, 0],
+        [0, 0, 0]
+    ]
+
+    function show() {
+        let board = document.getElementById("board");
+        for(let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                let cell = document.createElement("div");
+                cell.classList.add("cell");
+                cell.innerText = pattern[j][i] == 2 ? "X" : pattern[j][i] == 1 ? "O" : "";
+                board.appendChild(cell);
+            }
+            board.appendChild(document.createElement("br"));
+        }
+    }
+
+    show(pattern);
+</script>
