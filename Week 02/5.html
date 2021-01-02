@@ -1,0 +1,59 @@
+<!--
+ * @Author: fangkg
+ * @Date: 2021-01-02 22:50:35
+ * @LastEditTime: 2021-01-02 23:00:15
+ * @LastEditors: Please set LastEditors
+ * @Description: 启发式搜索一
+ * @FilePath: \codeRepository\Frontend-08-Template\Week 02\5.html
+-->
+
+<style>
+    .cell {
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        background-color: gray;
+        border-bottom: solid 1px white;
+        border-right: solid 1px white;
+        vertical-align: middle;
+    }
+    #container {
+        width: 701px;
+    }
+</style>
+
+<div id="container"></div>
+<button onclick="localStorage['map'] = JSON.stringify(map)">save</button>
+
+<script>
+    class Sorted {
+        constructor(data, compare) {
+            this.data = data.slice();
+            this.compare = compare || ((a, b) => a - b);
+        }
+
+        take() {
+            if (!this.data.length) {
+                return;
+            }
+            let min = this.data[0];
+            let minIifndex = 0;
+
+            for(let i = 1; i < this.data.length; i++) {
+                if(this.compare(this.data[i], min) < 0) {
+                    min = this.data[i];
+                    minIndex = i;
+                }
+            }
+
+            this.data[minIndex] = this.data[this.data.length - 1];
+            this.data.pop();
+            
+            return min;
+        }
+
+        give(v) {
+            this.data.push(v);
+        }
+    }
+</script>
