@@ -1,0 +1,31 @@
+<!--
+ * @Author: fangkg
+ * @Date: 2021-01-05 09:31:58
+ * @LastEditTime: 2021-01-05 12:41:51
+ * @LastEditors: Please set LastEditors
+ * @Description: 使用LL算法构建AST-词法分析一
+ * @FilePath: \codeRepository\Frontend-08-Template\Week 03\1.html
+-->
+<script>
+    let regexp = /([0-9\.]+)|([ \t]+)|([\r\n]+)|(\*)|(\/)|(\+)|(\-)/g
+    let dictionary = ["Number", "Whitespace", "LineTerminator", "*", "/", "+", "-"];
+
+    function tokenize(source) {
+        let result = null;
+        while(true) {
+            result = regexp.exec(source);
+            if(!result) {
+                break;
+            }
+
+            for(let i = 1; i <= dictionary.length; i++) {
+                if (result[i]) {
+                    console.log(dictionary[i - 1]);
+                }
+            }
+            console.log('result:', result);
+        }
+    }
+
+    tokenize("1024 + 10 * 25");
+</script>
