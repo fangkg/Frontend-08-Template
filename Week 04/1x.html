@@ -1,0 +1,53 @@
+<!--
+ * @Author: fangkg
+ * @Date: 2021-01-17 19:46:32
+ * @LastEditTime: 2021-01-17 19:55:10
+ * @LastEditors: Please set LastEditors
+ * @Description: 字符串分析算法--字典树
+ * @FilePath: \codeRepository\Frontend-08-Template\Week 04\1x.html
+-->
+
+<script>
+    let $ = Symbol("$");
+    class Trie {
+        constructor() {
+            this.root = Object.create(null);
+        }
+
+        insert(word) {
+            let node = this.root;
+            for(let c of word) {
+                if (!node[c]) {
+                    node[c] = Object.create(null);
+                    node = node[c];
+                }
+                if (!($ in node)) {
+                    node[$] = 0;
+                }
+
+                node[$] ++;
+            }
+        }
+
+        most() {
+            let max = 0;
+            let maxWord = null;
+            let visit = (node, word) => {
+                if (node[$] && node[$] > max) {
+                    max = node[$];
+                    maxWord = word;
+                }
+                for(let p in node) {
+                    visit(node[p], word + p);
+                }
+            }
+
+            visit(this.root, "");
+            console.log(maxWord);
+        }
+    }
+
+    function randomWord(length) {
+        
+    }
+</script>
