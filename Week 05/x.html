@@ -1,0 +1,99 @@
+<!--
+ * @Author: fangkg
+ * @Date: 2021-01-24 19:15:41
+ * @LastEditTime: 2021-01-24 20:01:21
+ * @LastEditors: Please set LastEditors
+ * @Description: proxy与双向绑定
+ * @FilePath: \codeRepository\Frontend-08-Template\Week 05\x.html
+-->
+<input id="r" type="range" min=0 max=255/>
+<div id="color" style="height: 100px; width: 100px;"></div>
+<script>
+    let object = {
+        a: 1,
+        b: 2
+    }
+
+    let rObj = {
+        r: 1,
+        g: 1,
+        b: 1
+    }
+    // let callbakcs = [];
+    let callbacks = new Map();
+    let usedReactives = [];
+    let reactivties = new Map();
+
+    let po  = new Proxy(object, {
+        // hook函数
+        set(obj, prop, val) {
+            console.log(obj, prop, val);
+        }
+    })
+
+    function reactive(object) {
+        if(reactives.has(object)) {
+            return reactives.get(object);
+        }
+        
+        let proxy = new Proxy(object, {
+            set(obj, prop, val) {
+                console.log(obj, prop, val);
+                obj[prop] = val;
+                if(callbacks.get(obj)) {
+                    if(callbacks.get(obj).get(prop)) {
+                        // 遍历callbacks
+                        for(let callback of callbacks.get(obj).get(prop)) {
+                            callback();
+                        }
+                    }
+                }
+                
+                return obj[prop];
+            },
+            get(obj, prop) {
+                console.log(obj, prop);
+                usedReactives.push([obj, prop]);
+                if(typeof obj[prop] === "object") {
+                    return reactive(obj[prop]);
+                }
+                return obj[prop];
+            }
+        })
+
+        reactivties.set(object, proxy);
+
+        return proxy;
+    }
+
+    let proObj = reactive(object);
+
+    function effect(callback) {
+        // callbakcs.push(callback);
+        // 清空usedReactives
+        usedReactives = [];
+        callback();
+
+        for(let reactivity of usedReactives) {
+            if(!callbacks.has(reactivity[0])) {
+                callbacks.set(reactivity[0], new Map());
+            }
+            // 第二层对象属性
+            if(!callbacks.get(reactivity[0]).has(reactivity[1])) {
+                callbacks.get(reactivity[0]).set(reactivity[1], []);
+            }
+            callbacks.get(reactivity[0]).get(reactivity[1]).push(callback);
+        }
+    }
+
+    effect(() => {
+        // console.log(po.a);
+        document.getElementById("r").value = po.r;
+    })
+
+    effect(() => {
+        document.getElementById("color").style.backgroundColor = `rgb(${po.r})`;
+    })
+    document.getElementById("r").addEventListener("input", event => po.r = event.target.value);
+    
+</script>
