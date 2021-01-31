@@ -1,0 +1,21 @@
+<!--
+ * @Author: fangkg
+ * @Date: 2021-01-31 20:35:40
+ * @LastEditTime: 2021-01-31 20:45:16
+ * @LastEditors: Please set LastEditors
+ * @Description: 四则运算带括号
+ * @FilePath: \codeRepository\Frontend-08-Template\Week 06\BNF.html
+-->
+<PrimaryExpression> = <DecimalNumber> | "(" <LogicalExpress> ")"
+
+<AdditiveExpression> = <PrimaryExpression> | 
+    <AdditiveExpression> "+" <PrimaryExpression> |
+    <AdditiveExpression> "-" <PrimaryExpression>
+
+<MultiplicativeExpression> = <DecimalNumber> | 
+    <MultiplicativeExpression> "*" <DecimalNumber> |
+    <MultiplicativeExpression> "/" <DecimalNumber>
+
+<LogicalExpress> = <DecimalNumber> | 
+    <LogicalExpress> "||" <AdditiveExpression> |
+    <LogicalExpress> "&&" <AdditiveExpression>
